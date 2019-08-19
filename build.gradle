@@ -30,7 +30,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	compile group: 'net.sf.json-lib', name: 'json-lib', version: '2.4',classifier:"jdk15"
 	compile('org.springframework.boot:spring-boot-starter-actuator')
-
+	compile('com.google.guava:guava:17.0')
 	compile("org.apache.commons:commons-lang3:3.3.2")
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
 }
