@@ -45,7 +45,7 @@ dependencyManagement {
 
 docker {
 
-	name "$project.group/$projectname:$project.version"
+	name "$project.group/$project.projectname:$project.version"
 	//tags 'latest'
 	dependsOn build
 	files jar.archivePath
