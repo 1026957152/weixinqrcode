@@ -6,7 +6,7 @@ plugins {
 }
 
 
-
+projectname = 'weixinqrcode'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 group = 'docker.yulinmei.cn'
@@ -45,7 +45,7 @@ dependencyManagement {
 
 docker {
 
-	name "$project.group/$project.name:$project.version"
+	name "$project.group/$projectname:$project.version"
 	//tags 'latest'
 	dependsOn build
 	files jar.archivePath
