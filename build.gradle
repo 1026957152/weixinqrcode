@@ -46,7 +46,7 @@ dependencyManagement {
 
 docker {
 
-	name "$project.group/${springVersion}:$project.version"
+	name "$project.group/$project.name:$project.version"
 	//tags 'latest'
 	dependsOn build
 	files jar.archivePath
