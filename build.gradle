@@ -6,7 +6,7 @@ plugins {
 }
 
 
-projectname = 'weixinqrcode'
+def springVersion = 'weixinqrcode'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 group = 'docker.yulinmei.cn'
@@ -17,6 +17,7 @@ repositories {
 
 ext {
 	set('springCloudVersion', "Greenwich.SR2")
+	projectname = 'weixinqrcode'
 }
 
 dependencies {
@@ -45,7 +46,7 @@ dependencyManagement {
 
 docker {
 
-	name "$project.group/$project.projectname:$project.version"
+	name "$project.group/${springVersion}:$project.version"
 	//tags 'latest'
 	dependsOn build
 	files jar.archivePath
