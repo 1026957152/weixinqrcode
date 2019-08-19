@@ -43,8 +43,8 @@ public class V2QrcodeRestController {
     protected transient Logger logger = LoggerFactory.getLogger(V2QrcodeRestController.class);
 
 
-    String WeixinUrlFilte_delivery= "";
-    String WeixinUrlFilter_trade= "";
+    String WeixinUrlFilte_delivery= "wx6d7f2fec44663493";;
+    String WeixinUrlFilter_trade= "wx242f2ca59a3973bf";
 
     @Autowired
     private WxService wxService;

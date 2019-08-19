@@ -31,8 +31,6 @@ public class AccessTokenManagerService extends BaseServiceImpl {
     @Qualifier(value="kafkaTemplateJson")
     private KafkaTemplate kafkaTemplateJson;
 
-    private static volatile Token accessToken;
-    private static volatile LocalDateTime lastUpdateTime = LocalDateTime.now();
 
     Map<String,AccessTokenEventJson> map = new HashMap();
 
@@ -45,15 +43,6 @@ public class AccessTokenManagerService extends BaseServiceImpl {
 
         System.out.println("11111111111111  Received Messasge in group foo: " + message.toString());
 
-
-/*
-        TransportEventJson capacityEventJSON = new TransportEventJson(message.value());
-        kafkaTemplateJson.send("transport-event-json",capacityEventJSON);
-
-        String appId = WeixinUrlFilte_delivery.Constants_CORPID;
-        String appSecret =  WeixinUrlFilte_delivery.APP_SECRET;// "APPSECRET";
-        AccessTokenUpdate accessTokenUpdate = new AccessTokenUpdate(appId,appSecret,"delivery");
-        */
 
         map.put(message.AppId,message);
 

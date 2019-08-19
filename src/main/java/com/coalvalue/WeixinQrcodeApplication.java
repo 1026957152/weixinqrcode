@@ -1,4 +1,4 @@
-package com.coalvalue.weixinQrcode;
+package com.coalvalue;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
