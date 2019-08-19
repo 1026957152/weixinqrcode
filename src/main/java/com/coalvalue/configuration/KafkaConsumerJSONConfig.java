@@ -20,7 +20,7 @@ public class KafkaConsumerJSONConfig {
     private final static String TOPIC = "new-employees";
 
 
-    @Bean
+   //- @Bean
     public ConsumerFactory<String, Object> yourConsumerFactory2() {
         Map<String, Object> props = new HashMap<>();
 /*

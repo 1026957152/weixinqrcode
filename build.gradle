@@ -2,11 +2,14 @@ plugins {
 	id 'org.springframework.boot' version '2.1.7.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
 	id 'java'
+	id 'com.palantir.docker' version '0.22.1'
 }
 
-group = 'com.coalvalue'
+
+
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
+group = 'docker.yulinmei.cn'
 
 repositories {
 	mavenCentral()
@@ -36,4 +39,28 @@ dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
 	}
+}
+
+
+
+docker {
+
+	name "$project.group/$project.name:$project.version"
+	//tags 'latest'
+	dependsOn build
+	files jar.archivePath
+	//, processResources, bootJar.archivePath, './build/themyscira-openapi-with-aws-extensions.json'
+
+	// 将 bootJar 任务的输出内容，复制到 build/docker/dependency 下
+	// build/docker/ 为 Docker 工作目录
+	// 后续 Dockerfile 中复制文件时，都相对这个位置进行
+	//copySpec.from(tasks.bootJar.outputs.files.singleFile).into("dependency")
+
+
+	//copySpec.from("secretData/").into("data")
+	//files bootJar
+	dockerfile file('src/main/docker/Dockerfile')
+	buildArgs([BUILD_VERSION: project.version,JAR_FILE: project.name])
+
+
 }
