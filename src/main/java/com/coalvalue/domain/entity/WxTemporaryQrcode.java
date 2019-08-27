@@ -15,7 +15,7 @@ import javax.persistence.Table;
 public class WxTemporaryQrcode extends BaseDomain {
 
     @Column(name = "scan_id")
-    private Integer scanId;
+    private Integer key;
 
 
     @Column(name = "app_id")
@@ -45,12 +45,12 @@ public class WxTemporaryQrcode extends BaseDomain {
     }
 
 
-    public Integer getScanId() {
-        return scanId;
+    public Integer getKey() {
+        return key;
     }
 
-    public void setScanId(Integer scanId) {
-        this.scanId = scanId;
+    public void setKey(Integer key) {
+        this.key = key;
     }
 
 

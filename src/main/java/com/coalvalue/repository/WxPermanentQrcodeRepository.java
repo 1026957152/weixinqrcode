@@ -11,7 +11,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface WxPermanentQrcodeRepository extends JpaRepository<WxPermanentQrcode, Integer> {
     WxPermanentQrcode findByKeyAndAppId(Integer integer, String appId);
-    WxPermanentQrcode findByObjectUuidAndItemTypeAndTypeAndAppIdAndStatus(String uuid, String resourceType, String type, String appId, String qrcode_status_valid);
+    WxPermanentQrcode findByObjectIdAndItemTypeAndTypeAndAppIdAndStatus(String uuid, String resourceType, String type, String appId, String qrcode_status_valid);
 
-    Page<WxPermanentQrcode> findByObjectUuid(String companyId, Pageable of);
+    Page<WxPermanentQrcode> findByObjectId(String companyId, Pageable of);
+
+    WxPermanentQrcode findByObjectIdAndTypeAndAppIdAndStatus(String uuid, String text, String weixinUrlFilte_delivery, String qrcode_status_valid);
 }

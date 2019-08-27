@@ -4,6 +4,7 @@ package com.coalvalue.service;
 import com.coalvalue.domain.OperationResult;
 import com.coalvalue.domain.entity.*;
 
+import com.coalvalue.domain.enums.WxQrcodeTypeEnum;
 import com.coalvalue.service.BaseService;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,4 +31,5 @@ public interface WxService extends BaseService {
 
     OperationResult getByCompany_type_new_RETURN(String uuid, String text, String type, String constants_corpid);
 
+    WxPermanentQrcode getPermanentQrcode(String uuid, String info, WxQrcodeTypeEnum type_enum, String weixinUrlFilte_delivery);
 }

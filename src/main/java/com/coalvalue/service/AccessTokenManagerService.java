@@ -52,7 +52,7 @@ public class AccessTokenManagerService extends BaseServiceImpl {
         if( Integer.valueOf(message.Key)<100000) {
 
             WxPermanentQrcode wxPermanentQrcode = wxPermanentQrcodeRepository.findByKeyAndAppId(Integer.valueOf(message.Key), message.AppId);
-            System.out.println("扫到了 永久性的 二维码" + wxPermanentQrcode.getObjectUuid() + "===" + wxPermanentQrcode.getType());
+            System.out.println("扫到了 永久性的 二维码" + wxPermanentQrcode.getObjectId() + "===" + wxPermanentQrcode.getType());
             if (wxPermanentQrcode != null) {
                 WeixinRequestMessageTypeEvent_Scan_ResultJson capacityEventJSON = new WeixinRequestMessageTypeEvent_Scan_ResultJson();
                 capacityEventJSON.Behavior = "Create";
@@ -63,13 +63,13 @@ public class AccessTokenManagerService extends BaseServiceImpl {
                 capacityEventJSON.Subscribe = message.Subscribe;
                 if(wxPermanentQrcode.getInfo() == null){
                     Map map = new HashMap();
-                    map.put("objectId",wxPermanentQrcode.getObjectUuid());
+                    map.put("objectId",wxPermanentQrcode.getObjectId());
                     capacityEventJSON.Info = JSON.toJSONString(map);
                 }else{
                     capacityEventJSON.Info = wxPermanentQrcode.getInfo();
                 }
 
-                capacityEventJSON.ObjectId = wxPermanentQrcode.getObjectUuid();
+                capacityEventJSON.ObjectId = wxPermanentQrcode.getObjectId();
                 capacityEventJSON.Ttype = wxPermanentQrcode.getType();
 
 

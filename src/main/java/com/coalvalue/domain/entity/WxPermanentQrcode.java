@@ -33,7 +33,7 @@ public class WxPermanentQrcode extends BaseDomain{
     private String ticket;
     private Integer itemId;
     private String itemType;
-    private String objectUuid;
+    private String objectId;
     private String info;
 
     public Integer getSubScene() {
@@ -146,13 +146,13 @@ public class WxPermanentQrcode extends BaseDomain{
         return itemType;
     }
 
-    public String getObjectUuid() {
+    public String getObjectId() {
 
-        return objectUuid;
+        return objectId;
     }
 
-    public void setObjectUuid(String objectUuid) {
-        this.objectUuid = objectUuid;
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
     }
 
     public String getInfo() {

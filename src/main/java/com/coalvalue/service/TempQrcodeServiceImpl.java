@@ -57,7 +57,7 @@ public class TempQrcodeServiceImpl extends BaseServiceImpl implements TempQrcode
         wxScanGeneral.setAppId(appId);
         wxScanGeneral.setInfo(info);
 
-        wxScanGeneral.setScanId(scanId);
+        wxScanGeneral.setKey(scanId);
         wxScanGeneral.setType(type_enum.getText());
 
         return wxScanGeneral;
@@ -79,13 +79,13 @@ public class TempQrcodeServiceImpl extends BaseServiceImpl implements TempQrcode
 
 
                 WxTemporaryQrcode wxTemporaryQrcode =  createMemaryTimeSilence_type(no,appId,scanId,ticket.getUrl(),ticket.getTicket(),info,type_enum);
-                stores.put(wxTemporaryQrcode.getScanId(),wxTemporaryQrcode);
+                stores.put(wxTemporaryQrcode.getKey(),wxTemporaryQrcode);
 
                 WeixinQrcodeEventJson capacityEventJSON = new WeixinQrcodeEventJson();
                 capacityEventJSON.setBehavior("Create");
                 capacityEventJSON.setTimestamp(LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli());
                 capacityEventJSON.setAppId(wxTemporaryQrcode.getAppId());
-                capacityEventJSON.setScanId(wxTemporaryQrcode.getScanId());
+                capacityEventJSON.setScanId(wxTemporaryQrcode.getKey());
                 capacityEventJSON.setTtype(wxTemporaryQrcode.getType());
                 capacityEventJSON.setStatus(wxTemporaryQrcode.getStatus());
 

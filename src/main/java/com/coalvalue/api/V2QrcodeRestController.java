@@ -491,7 +491,7 @@ System.out.println("建立二维码，请求"+type+"--------------"+ uuid);
         public List<WxPermanentQrcode> qrcodeForCompany(@PathVariable("companyId") String companyId){
 
 
-        Page<WxPermanentQrcode> wxPermanentQrcodes = wxGeneralRepository.findByObjectUuid(companyId,PageRequest.of(0,10));
+        Page<WxPermanentQrcode> wxPermanentQrcodes = wxGeneralRepository.findByObjectId(companyId,PageRequest.of(0,10));
 
 
 
@@ -499,6 +499,33 @@ System.out.println("建立二维码，请求"+type+"--------------"+ uuid);
         System.out.println("---------"+wxPermanentQrcodes.getContent().toString());
         return wxPermanentQrcodes.getContent();
     }
+
+
+
+
+
+
+
+    @RequestMapping(method = RequestMethod.GET, value = "/permanent/{uuid}/{type}")
+    public Map getPermanentQrcode(@PathVariable("uuid") String uuid,@PathVariable("type") String type,@RequestParam("info") String info) {
+
+        WxQrcodeTypeEnum type_enum = WxQrcodeTypeEnum.fromString(type);
+
+        WxPermanentQrcode wxPermanentQrcode_cache = wxService.getPermanentQrcode(uuid,info,type_enum,
+                WeixinUrlFilte_delivery);
+
+
+        Map map = new HashMap();
+
+        map.put("content", wxPermanentQrcode_cache.getContent());
+        map.put("uuid", uuid);
+
+        map.put("id",wxPermanentQrcode_cache.getKey());
+        return map;
+    }
+
+
+
 
     @RequestMapping(method = RequestMethod.GET, value = "/temp/{uuid}/{type}")
     public Map getTempQrcode(@PathVariable("uuid") String uuid,@PathVariable("type") String type,@RequestParam("info") String info) {
@@ -514,7 +541,7 @@ System.out.println("建立二维码，请求"+type+"--------------"+ uuid);
         map.put("content", wxPermanentQrcode_cache.getContent());
         map.put("uuid", uuid);
 
-        map.put("id",wxPermanentQrcode_cache.getScanId());
+        map.put("id",wxPermanentQrcode_cache.getKey());
         return map;
     }
 
@@ -529,7 +556,7 @@ System.out.println("建立二维码，请求"+type+"--------------"+ uuid);
 
         map.put("content", wxPermanentQrcode_cache.getContent());
         map.put("uuid", wxPermanentQrcode_cache.getObjectUuid());
-        map.put("id",wxPermanentQrcode_cache.getScanId());
+        map.put("id",wxPermanentQrcode_cache.getKey());
         return map;
     }
 }
