@@ -248,10 +248,7 @@ public class WxServiceImpl extends BaseServiceImpl implements WxService {
                 wxScanGeneral.setAppId(appId);
 
 
-                Map map = new HashMap<>();
 
-                map.put("companyId",uuid);
-                wxScanGeneral.setInfo(JSON.toJSONString(map));
 
                 logger.debug("创建 新的永久二维马we are after find wxgeneral "+uuid);
                 logger.debug("创建 新的永久二维马we are after find wxgeneral "+appId);
