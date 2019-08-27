@@ -119,7 +119,7 @@ public class AccessTokenManagerService extends BaseServiceImpl {
 
     Map<String,AccessTokenEventJson> map = new HashMap();
 
-    @KafkaListener(id="aa__9_" ,topics = "access-token-event-json", groupId = "aplog_fuck__44_access_token",containerFactory = "kafkaListenerContainerFactory_JSON")
+    @KafkaListener(id="aa00000_9_" ,topics = "access-token-event-json", groupId = "aplog_fu000000_access_token",containerFactory = "kafkaListenerContainerFactory_JSON")
 
     public void listen_message_TransportEvent(AccessTokenEventJson message) {
 
