@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -41,6 +42,8 @@ import java.util.concurrent.TimeUnit;
 public class V2QrcodeRestController {
 
     protected transient Logger logger = LoggerFactory.getLogger(V2QrcodeRestController.class);
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
 
 
     String WeixinUrlFilte_delivery= "wx6d7f2fec44663493";;
@@ -272,9 +275,9 @@ System.out.println("建立二维码，请求"+type+"--------------"+ uuid);
                 map.put("uuid", uuid);
                 map.put("type",qrtype );
             }
-            if(WxQrcodeTypeEnum.WX_QRCODE_TYPE_BIND_DISTRIBUTOR_USER_ACCOUNT.getText().equals(type)){
+            if(WxQrcodeTypeEnum.WX_QRCODE_TYPE_BIND_EMPLOYEE_ACCOUNT.getText().equals(type)){
 
-                WxQrcodeTypeEnum qrtype = WxQrcodeTypeEnum.WX_QRCODE_TYPE_BIND_DISTRIBUTOR_USER_ACCOUNT;
+                WxQrcodeTypeEnum qrtype = WxQrcodeTypeEnum.WX_QRCODE_TYPE_BIND_EMPLOYEE_ACCOUNT;
                 WxTemporaryQrcode wxPermanentQrcode_cache = cache.getIfPresent(uuid);
 
                 if(wxPermanentQrcode_cache == null){
@@ -497,11 +500,12 @@ System.out.println("建立二维码，请求"+type+"--------------"+ uuid);
         return wxPermanentQrcodes.getContent();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/temp/{uuid}")
-    public Map getTempQrcode(@PathVariable("uuid") String uuid) {
+    @RequestMapping(method = RequestMethod.GET, value = "/temp/{uuid}/{type}")
+    public Map getTempQrcode(@PathVariable("uuid") String uuid,@PathVariable("type") String type,@RequestParam("info") String info) {
 
+            WxQrcodeTypeEnum type_enum = WxQrcodeTypeEnum.fromString(type);
 
-        WxTemporaryQrcode wxPermanentQrcode_cache = tempQrcodeService.getMemoryTemporaryQrcode(uuid,
+        WxTemporaryQrcode wxPermanentQrcode_cache = tempQrcodeService.getMemoryTemporaryQrcode(uuid,info,type_enum,
                 WeixinUrlFilte_delivery);
 
 
@@ -518,7 +522,7 @@ System.out.println("建立二维码，请求"+type+"--------------"+ uuid);
     public Map getObjectByTempId(@PathVariable("id") Integer uuid) {
 
 
-        WxTemporaryQrcode wxPermanentQrcode_cache = tempQrcodeService.getTempByObjectId(uuid);
+        WxTemporaryQrcode wxPermanentQrcode_cache = tempQrcodeService.getTempByKey(uuid);
 
 
         Map map = new HashMap();

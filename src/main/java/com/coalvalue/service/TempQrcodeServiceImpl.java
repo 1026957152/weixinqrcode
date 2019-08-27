@@ -3,8 +3,8 @@ package com.coalvalue.service;
 import com.coalvalue.configuration.CommonConstant;
 
 import com.coalvalue.domain.entity.WxTemporaryQrcode;
+import com.coalvalue.domain.enums.WxQrcodeTypeEnum;
 import com.coalvalue.domain.json.WeixinQrcodeEventJson;
-import com.coalvalue.service.AccessTokenManagerService;
 import com.coalvalue.weixin.pojo.WeixinQRCode;
 import com.coalvalue.weixin.util.AdvancedUtil;
 import org.slf4j.Logger;
@@ -37,11 +37,12 @@ public class TempQrcodeServiceImpl extends BaseServiceImpl implements TempQrcode
     private AccessTokenManagerService accessTokenManagerService;
 
 
+
     @Autowired
     private MySQLMaxValueIncrementer wxTemporaryQrcodeScanIdGenerator;
 
 
-    public WxTemporaryQrcode createMemaryTimeSilence_type(String uuid, String appId, Integer scanId, String content, String ticket) {
+    public WxTemporaryQrcode createMemaryTimeSilence_type(String uuid, String appId, Integer scanId, String content, String ticket, String info, WxQrcodeTypeEnum type_enum) {
 
         logger.debug("createTimeSilence_type {} {} {} {} {} {}",uuid,appId,scanId,content,ticket );
 
@@ -54,9 +55,10 @@ public class TempQrcodeServiceImpl extends BaseServiceImpl implements TempQrcode
         wxScanGeneral.setStatus(CommonConstant.QRCODE_STATUS_Valid);
 
         wxScanGeneral.setAppId(appId);
-
+        wxScanGeneral.setInfo(info);
 
         wxScanGeneral.setScanId(scanId);
+        wxScanGeneral.setType(type_enum.getText());
 
         return wxScanGeneral;
 
@@ -65,7 +67,7 @@ public class TempQrcodeServiceImpl extends BaseServiceImpl implements TempQrcode
 
     Map<Integer, WxTemporaryQrcode> stores = new HashMap<>();
     @Override
-    public WxTemporaryQrcode getMemoryTemporaryQrcode(String no,String appId) {
+    public WxTemporaryQrcode getMemoryTemporaryQrcode(String no, String info, WxQrcodeTypeEnum type_enum, String appId) {
         String accessToken = accessTokenManagerService.getAccessToken(appId).getAccessToken();
 
 
@@ -76,7 +78,7 @@ public class TempQrcodeServiceImpl extends BaseServiceImpl implements TempQrcode
             if (ticket != null) {
 
 
-                WxTemporaryQrcode wxTemporaryQrcode =  createMemaryTimeSilence_type(no,appId,scanId,ticket.getUrl(),ticket.getTicket());
+                WxTemporaryQrcode wxTemporaryQrcode =  createMemaryTimeSilence_type(no,appId,scanId,ticket.getUrl(),ticket.getTicket(),info,type_enum);
                 stores.put(wxTemporaryQrcode.getScanId(),wxTemporaryQrcode);
 
                 WeixinQrcodeEventJson capacityEventJSON = new WeixinQrcodeEventJson();
@@ -96,9 +98,11 @@ public class TempQrcodeServiceImpl extends BaseServiceImpl implements TempQrcode
                 capacityEventJSON.setContent(wxTemporaryQrcode.getContent());
                 capacityEventJSON.setTicket(wxTemporaryQrcode.getTicket());
 
-                capacityEventJSON.setItemType("_");
+                capacityEventJSON.setTtype(wxTemporaryQrcode.getType());
                 capacityEventJSON.setObjectUuid(wxTemporaryQrcode.getObjectUuid());
                 capacityEventJSON.setQrCode(wxTemporaryQrcode.getQrCode());
+                capacityEventJSON.setInfo(wxTemporaryQrcode.getInfo());
+                capacityEventJSON.setType(wxTemporaryQrcode.getType());
 
 
                 kafkaTemplateJson.send("weixin-qrcode-event-json",capacityEventJSON);
@@ -115,9 +119,13 @@ public class TempQrcodeServiceImpl extends BaseServiceImpl implements TempQrcode
         return null;
     }
 
-    @Override
+
+
+
+
+
     @Transactional
-    public WxTemporaryQrcode getTempByObjectId(Integer id) {
+    public WxTemporaryQrcode getTempByKey(Integer id) {
 
 
         return stores.get(id);
@@ -125,6 +133,7 @@ public class TempQrcodeServiceImpl extends BaseServiceImpl implements TempQrcode
 
 
     }
+
 
 
 

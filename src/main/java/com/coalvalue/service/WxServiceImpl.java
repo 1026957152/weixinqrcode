@@ -1,5 +1,6 @@
 package com.coalvalue.service;
 
+import com.alibaba.fastjson.JSON;
 import com.coalvalue.configuration.CommonConstant;
 
 import com.coalvalue.domain.OperationResult;
@@ -28,9 +29,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.ServletContext;
-import java.io.File;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -69,7 +71,7 @@ public class WxServiceImpl extends BaseServiceImpl implements WxService {
 
     public WxPermanentQrcode getByCompany_type_new(String uuid, String resourceType, String type, String appId) {
 
-        WxPermanentQrcode wxScanGeneral =  wxGeneralRepository.findByObjectUuidAndItemTypeAndTypeAndOfficialAccountIdAndStatus(uuid, resourceType, type, appId, CommonConstant.QRCODE_STATUS_Valid);
+        WxPermanentQrcode wxScanGeneral =  wxGeneralRepository.findByObjectUuidAndItemTypeAndTypeAndAppIdAndStatus(uuid, resourceType, type, appId, CommonConstant.QRCODE_STATUS_Valid);
 
 
         if(wxScanGeneral!= null){
@@ -96,7 +98,7 @@ public class WxServiceImpl extends BaseServiceImpl implements WxService {
         wxScanGeneral.setObjectUuid(uuid);
         wxScanGeneral.setType(type);
         wxScanGeneral.setStatus(CommonConstant.QRCODE_STATUS_Valid);
-        wxScanGeneral.setOfficialAccountId(appId);
+        wxScanGeneral.setAppId(appId);
 
 
 
@@ -105,7 +107,7 @@ public class WxServiceImpl extends BaseServiceImpl implements WxService {
         logger.debug("创建 新的永久二维马we are after find wxgeneral ");
 
 
-        wxScanGeneral.setScanId(wxScanGeneral.getId());
+        wxScanGeneral.setKey(wxScanGeneral.getId());
         wxScanGeneral =wxGeneralRepository.save(wxScanGeneral);
 
 
@@ -129,9 +131,17 @@ public class WxServiceImpl extends BaseServiceImpl implements WxService {
     }
     public OperationResult getByCompany_type_new_RETURN(String uuid, String resourceType, String type, String appId) {
 
-        WxPermanentQrcode wxScanGeneral =  wxGeneralRepository.findByObjectUuidAndItemTypeAndTypeAndOfficialAccountIdAndStatus(uuid, resourceType, type, appId, CommonConstant.QRCODE_STATUS_Valid);
+        WxPermanentQrcode wxScanGeneral =  wxGeneralRepository.findByObjectUuidAndItemTypeAndTypeAndAppIdAndStatus(uuid, resourceType, type, appId, CommonConstant.QRCODE_STATUS_Valid);
 
         Integer scanId = wxPermanentQrcodeScanIdGenerator.nextIntValue();
+
+        if(wxScanGeneral != null && wxScanGeneral.getInfo() == null){
+            Map map = new HashMap<>();
+
+            map.put("companyId",uuid);
+            wxScanGeneral.setInfo(JSON.toJSONString(map));
+            wxScanGeneral =wxGeneralRepository.save(wxScanGeneral);
+        }
         if(wxScanGeneral== null){
             String accessToken = accessTokenManagerService.getAccessToken(appId).getAccessToken();
             WeixinQRCode ticket = AdvancedUtil.createPermanentQRCode(accessToken, scanId);
@@ -144,16 +154,20 @@ public class WxServiceImpl extends BaseServiceImpl implements WxService {
                 wxScanGeneral.setObjectUuid(uuid);
                 wxScanGeneral.setType(type);
                 wxScanGeneral.setStatus(CommonConstant.QRCODE_STATUS_Valid);
-                wxScanGeneral.setOfficialAccountId(appId);
+                wxScanGeneral.setAppId(appId);
 
 
+                Map map = new HashMap<>();
+
+                map.put("companyId",uuid);
+                wxScanGeneral.setInfo(JSON.toJSONString(map));
 
                 logger.debug("创建 新的永久二维马we are after find wxgeneral "+uuid);
                 logger.debug("创建 新的永久二维马we are after find wxgeneral "+appId);
                 logger.debug("创建 新的永久二维马we are after find wxgeneral ");
 
 
-                wxScanGeneral.setScanId(scanId);
+                wxScanGeneral.setKey(scanId);
                 wxScanGeneral =wxGeneralRepository.save(wxScanGeneral);
                 wxScanGeneral.setContent(ticket.getUrl());
                 wxScanGeneral.setTicket(ticket.getTicket());
@@ -165,8 +179,8 @@ public class WxServiceImpl extends BaseServiceImpl implements WxService {
                 capacityEventJSON.setBehavior("Create");
 
                 capacityEventJSON.setTimestamp(LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli());
-                capacityEventJSON.setAppId(wxScanGeneral.getOfficialAccountId());
-                capacityEventJSON.setScanId(wxScanGeneral.getScanId());
+                capacityEventJSON.setAppId(wxScanGeneral.getAppId());
+                capacityEventJSON.setScanId(wxScanGeneral.getKey());
                 capacityEventJSON.setTtype(wxScanGeneral.getType());
                 capacityEventJSON.setStatus(wxScanGeneral.getStatus());
 
@@ -179,10 +193,10 @@ public class WxServiceImpl extends BaseServiceImpl implements WxService {
                 capacityEventJSON.setTicket(wxScanGeneral.getTicket());
                 capacityEventJSON.setTemporaryOrPermanent("Permanent");
 
-                capacityEventJSON.setItemType(wxScanGeneral.getItemType());
+                capacityEventJSON.setTtype(wxScanGeneral.getItemType());
                 capacityEventJSON.setObjectUuid(wxScanGeneral.getObjectUuid());
                 capacityEventJSON.setQrCode(wxScanGeneral.getQrCode());
-
+                capacityEventJSON.setType(wxScanGeneral.getItemType());
 
                 kafkaTemplateJson.send("weixin-qrcode-event-json",capacityEventJSON);
 
@@ -566,7 +580,7 @@ public class WxServiceImpl extends BaseServiceImpl implements WxService {
                 capacityEventJSON.setContent(wxScanGeneral.getContent());
                 capacityEventJSON.setTicket(wxScanGeneral.getTicket());
 
-                capacityEventJSON.setItemType("_");
+                capacityEventJSON.setType(wxScanGeneral.getType());
                 capacityEventJSON.setObjectUuid(wxScanGeneral.getObjectUuid());
                 capacityEventJSON.setQrCode(wxScanGeneral.getQrCode());
 

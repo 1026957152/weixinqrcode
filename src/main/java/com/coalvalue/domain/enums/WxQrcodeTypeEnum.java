@@ -11,7 +11,7 @@ import java.util.List;
 public enum WxQrcodeTypeEnum {
 
 
-    WX_QRCODE_TYPE_BIND_DISTRIBUTOR_USER_ACCOUNT ("bind_distributor_user_account","资产","A","",true,2592000),
+    WX_QRCODE_TYPE_BIND_EMPLOYEE_ACCOUNT ("bind_employee_account","资产","A","",true,2592000),
     WX_QRCODE_TYPE_DELIVERY_ORDER_DISTRRIBUTO ("delivery_order_distribute","负债","L","",true,2592000),
     WX_QRCODE_TYPE_CONSIGNEE_DELIVERY_ORDER ("consignee_get_delivery_order" ,"所有者权益","E","",true,2592000),
     WX_QRCODE_TYPE_COMPANY_BIND_AUTO_SYSTEM ("bind_auto_system" ,"所有者权益","E","",true,2592000),

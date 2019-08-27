@@ -12,16 +12,14 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "wx_general")
 
-public class WxPermanentQrcode extends BaseDomain {
+public class WxPermanentQrcode extends BaseDomain{
 
     @Column(name = "scan_id")
-    private Integer scanId;
+    private Integer key;
 
-    @Column(name = "company_id")
-    private Integer companyId;
 
     @Column(name = "app_id")
-    private String officialAccountId;
+    private String appId;
 
     @Column(name = "scan_type")
     private String type;
@@ -29,13 +27,14 @@ public class WxPermanentQrcode extends BaseDomain {
 
     private Integer subScene;
 
-    private Integer url;
+
     private String content;
 
     private String ticket;
     private Integer itemId;
     private String itemType;
     private String objectUuid;
+    private String info;
 
     public Integer getSubScene() {
         return subScene;
@@ -58,28 +57,21 @@ public class WxPermanentQrcode extends BaseDomain {
         this.note = note;
     }
 
-    public Integer getScanId() {
-        return scanId;
+    public Integer getKey() {
+        return key;
     }
 
-    public void setScanId(Integer scanId) {
-        this.scanId = scanId;
+    public void setKey(Integer key) {
+        this.key = key;
     }
 
-    public Integer getCompanyId() {
-        return companyId;
+
+    public String getAppId() {
+        return appId;
     }
 
-    public void setCompanyId(Integer companyId) {
-        this.companyId = companyId;
-    }
-
-    public String getOfficialAccountId() {
-        return officialAccountId;
-    }
-
-    public void setOfficialAccountId(String officialAccountId) {
-        this.officialAccountId = officialAccountId;
+    public void setAppId(String appId) {
+        this.appId = appId;
     }
 
     public String getType() {
@@ -154,12 +146,20 @@ public class WxPermanentQrcode extends BaseDomain {
         return itemType;
     }
 
-    public void setObjectUuid(String objectUuid) {
+    public String getObjectUuid() {
 
+        return objectUuid;
+    }
+
+    public void setObjectUuid(String objectUuid) {
         this.objectUuid = objectUuid;
     }
 
-    public String getObjectUuid() {
-        return objectUuid;
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
     }
 }

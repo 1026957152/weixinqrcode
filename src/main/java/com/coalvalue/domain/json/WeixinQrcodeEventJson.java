@@ -27,12 +27,14 @@ public class WeixinQrcodeEventJson {
 
     private String ticket;
 
-    private String itemType;
+
     private String objectUuid;
 
     private String qrCode;
     private String id;
     private String temporaryOrPermanent;
+    private String info;
+    private String type;
 
 
     /**
@@ -104,13 +106,6 @@ public class WeixinQrcodeEventJson {
         this.ticket = ticket;
     }
 
-    public String getItemType() {
-        return itemType;
-    }
-
-    public void setItemType(String itemType) {
-        this.itemType = itemType;
-    }
 
     public String getObjectUuid() {
         return objectUuid;
@@ -171,5 +166,21 @@ public class WeixinQrcodeEventJson {
 
     public String getTemporaryOrPermanent() {
         return temporaryOrPermanent;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
     }
 }
