@@ -19,6 +19,7 @@ public enum WxQrcodeTypeEnum {
 
     WX_QRCODE_TYPE_COMPANY_logistics ("company_logistics" ,"company_logistics","E","",false,2592000),
     WX_QRCODE_TYPE_COMPANY_delivery ("company_delivery" ,"company_delivery","E","",false,2592000),
+    WX_QRCODE_TYPE_FOLLOW_COMPANY ("follow_company" ,"follow_company","E","",true,2592000),
 
     WX_QRCODE_TYPE_COMPANY ("company" ,"company","E","",true,2592000),
     WX_QRCODE_TYPE_COMPANY_TRADER ("company_trader" ,"company_trader","E","",true,2592000),
