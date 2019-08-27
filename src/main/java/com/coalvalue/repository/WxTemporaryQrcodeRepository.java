@@ -13,17 +13,12 @@ public interface WxTemporaryQrcodeRepository extends JpaRepository<WxTemporaryQr
 
 
 
-
-    WxTemporaryQrcode findByScanIdAndAppId(Integer scanId, String corpid);
-
     Optional<WxTemporaryQrcode> findById(Integer id);
 
 
-    WxTemporaryQrcode findByTicket(String verificationCode);
 
 
-
-    WxTemporaryQrcode findByObjectUuidAndTypeAndAppIdAndStatus(String objectUuid, String wxQrcodeTypeScatteredOrder, String corpId, String qrcode_status_valid);
+    WxTemporaryQrcode findByObjectIdAndTypeAndAppIdAndStatus(String objectUuid, String wxQrcodeTypeScatteredOrder, String corpId, String qrcode_status_valid);
 
 
     WxTemporaryQrcode findByTypeAndAppIdAndStatus(String wxQrcodeTypeScatteredOrder, String corpid, String qrcode_status_valid);

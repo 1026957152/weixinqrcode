@@ -99,7 +99,7 @@ public class AccessTokenManagerService extends BaseServiceImpl {
             capacityEventJSON.Key = message.Key;
             capacityEventJSON.Subscribe = message.Subscribe;
             capacityEventJSON.Info = wxTemporaryQrcode.getInfo();
-            capacityEventJSON.ObjectId = wxTemporaryQrcode.getObjectUuid();
+            capacityEventJSON.ObjectId = wxTemporaryQrcode.getObjectId();
             capacityEventJSON.Ttype = wxTemporaryQrcode.getType();
 
             Map user = JSON.parseObject(wxTemporaryQrcode.getInfo(),Map.class);

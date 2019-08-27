@@ -348,7 +348,7 @@ public class WxServiceImpl extends BaseServiceImpl implements WxService {
 
 
         WxTemporaryQrcode wxScanGeneral =  new WxTemporaryQrcode();
-        wxScanGeneral.setObjectUuid(uuid);
+        wxScanGeneral.setObjectId(uuid);
         wxScanGeneral.setContent(content);
         wxScanGeneral.setTicket(ticket);
         wxScanGeneral.setType(type);
@@ -369,7 +369,7 @@ public class WxServiceImpl extends BaseServiceImpl implements WxService {
 
 
         WxTemporaryQrcode wxScanGeneral =  new WxTemporaryQrcode();
-        wxScanGeneral.setObjectUuid(uuid);
+        wxScanGeneral.setObjectId(uuid);
         wxScanGeneral.setContent(content);
         wxScanGeneral.setTicket(ticket);
         wxScanGeneral.setType(type);
@@ -620,7 +620,7 @@ public class WxServiceImpl extends BaseServiceImpl implements WxService {
         int expireSeconds = createTemporaryQrcodeForm.getExpireSeconds();
 
 
-        WxTemporaryQrcode wxScanGeneral =  wxTemporaryQrcodeRepository.findByObjectUuidAndTypeAndAppIdAndStatus(objectUuid, type, createTemporaryQrcodeForm.corpId, CommonConstant.QRCODE_STATUS_Valid);
+        WxTemporaryQrcode wxScanGeneral =  wxTemporaryQrcodeRepository.findByObjectIdAndTypeAndAppIdAndStatus(objectUuid, type, createTemporaryQrcodeForm.corpId, CommonConstant.QRCODE_STATUS_Valid);
 
         if(wxScanGeneral == null ){
             Integer scanId = wxTemporaryQrcodeScanIdGenerator.nextIntValue();
@@ -629,7 +629,7 @@ public class WxServiceImpl extends BaseServiceImpl implements WxService {
                 wxScanGeneral = new WxTemporaryQrcode();
                 wxScanGeneral.setType(type);
 
-                wxScanGeneral.setObjectUuid(objectUuid);
+                wxScanGeneral.setObjectId(objectUuid);
                 wxScanGeneral.setStatus(CommonConstant.QRCODE_STATUS_Valid);
                 wxScanGeneral.setAppId(createTemporaryQrcodeForm.corpId);
                 wxScanGeneral.setExpireSeconds(expireSeconds);
@@ -670,7 +670,7 @@ public class WxServiceImpl extends BaseServiceImpl implements WxService {
                 capacityEventJSON.setTicket(wxScanGeneral.getTicket());
 
                 capacityEventJSON.setType(wxScanGeneral.getType());
-                capacityEventJSON.setObjectUuid(wxScanGeneral.getObjectUuid());
+                capacityEventJSON.setObjectUuid(wxScanGeneral.getObjectId());
                 capacityEventJSON.setQrCode(wxScanGeneral.getQrCode());
 
 

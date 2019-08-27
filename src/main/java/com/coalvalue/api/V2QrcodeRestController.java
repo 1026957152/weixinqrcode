@@ -555,7 +555,7 @@ System.out.println("建立二维码，请求"+type+"--------------"+ uuid);
         Map map = new HashMap();
 
         map.put("content", wxPermanentQrcode_cache.getContent());
-        map.put("uuid", wxPermanentQrcode_cache.getObjectUuid());
+        map.put("uuid", wxPermanentQrcode_cache.getObjectId());
         map.put("id",wxPermanentQrcode_cache.getKey());
         return map;
     }

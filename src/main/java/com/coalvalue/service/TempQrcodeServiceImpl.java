@@ -48,7 +48,7 @@ public class TempQrcodeServiceImpl extends BaseServiceImpl implements TempQrcode
 
 
         WxTemporaryQrcode wxScanGeneral =  new WxTemporaryQrcode();
-        wxScanGeneral.setObjectUuid(uuid);
+        wxScanGeneral.setObjectId(uuid);
         wxScanGeneral.setContent(content);
         wxScanGeneral.setTicket(ticket);
 
@@ -99,7 +99,7 @@ public class TempQrcodeServiceImpl extends BaseServiceImpl implements TempQrcode
                 capacityEventJSON.setTicket(wxTemporaryQrcode.getTicket());
 
                 capacityEventJSON.setTtype(wxTemporaryQrcode.getType());
-                capacityEventJSON.setObjectUuid(wxTemporaryQrcode.getObjectUuid());
+                capacityEventJSON.setObjectUuid(wxTemporaryQrcode.getObjectId());
                 capacityEventJSON.setQrCode(wxTemporaryQrcode.getQrCode());
                 capacityEventJSON.setInfo(wxTemporaryQrcode.getInfo());
                 capacityEventJSON.setType(wxTemporaryQrcode.getType());

@@ -33,7 +33,7 @@ public class WxTemporaryQrcode extends BaseDomain {
     private String ticket;
     private Integer expireSeconds;
     private String channel;
-    private String objectUuid;
+    private String objectId;
     private String info;
 
     public String getChannel() {
@@ -128,12 +128,12 @@ public class WxTemporaryQrcode extends BaseDomain {
         return expireSeconds;
     }
 
-    public void setObjectUuid(String objectUuid) {
-        this.objectUuid = objectUuid;
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
     }
 
-    public String getObjectUuid() {
-        return objectUuid;
+    public String getObjectId() {
+        return objectId;
     }
 
     public void setInfo(String info) {
