@@ -1,14 +1,6 @@
 package com.coalvalue.weixin.util;
 
-import com.coalvalue.weixin.pojo.resp.Article;
-import com.coalvalue.weixin.pojo.resp.MusicMessage;
-import com.coalvalue.weixin.pojo.resp.NewsMessage;
-import com.coalvalue.weixin.pojo.resp.TextMessage;
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.core.util.QuickWriter;
-import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
-import com.thoughtworks.xstream.io.xml.XppDriver;
+
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -152,74 +144,5 @@ public class MessageUtil {
 	}
 
 
-    /**
-	 * 文本消息对象转换成xml
-	 * 
-	 * @param textMessage
-	 *            文本消息对象
-	 * @return xml
-*/
-	public static String textMessageToXml(TextMessage textMessage) {
-		xstream.alias("xml", textMessage.getClass());
-		return xstream.toXML(textMessage);
-	}
-
-	/**
-	 * 音乐消息对象转换成xml
-	 * 
-	 * @param musicMessage
-	 *            音乐消息对象
-	 * @return xml
-    */
-	public static String musicMessageToXml(MusicMessage musicMessage) {
-		xstream.alias("xml", musicMessage.getClass());
-		return xstream.toXML(musicMessage);
-	}
-
-	/**
-	 * 图文消息对象转换成xml
-	 * 
-	 * @param newsMessage
-	 *            图文消息对象
-	 * @return xml
-    */
-	public static String newsMessageToXml(NewsMessage newsMessage) {
-		xstream.alias("xml", newsMessage.getClass());
-		xstream.alias("item", new Article().getClass());
-		return xstream.toXML(newsMessage);
-	}
-
-	/**
-	 * 扩展xstream，使其支持CDATA块
-	 * 
-	 * @date 2013-05-19
-	 */
-
-	private static XStream xstream = new XStream(new XppDriver() {
-		@Override
-		public HierarchicalStreamWriter createWriter(Writer out) {
-			return new PrettyPrintWriter(out) {
-				// 对所有xml节点的转换都增加CDATA标记
-				boolean cdata = true;
-
-				@Override
-				@SuppressWarnings("rawtypes")
-				public void startNode(String name, Class clazz) {
-					super.startNode(name, clazz);
-				}
-
-				@Override
-				protected void writeText(QuickWriter writer, String text) {
-					if (cdata) {
-						writer.write("<![CDATA[");
-						writer.write(text);
-						writer.write("]]>");
-					} else {
-						writer.write(text);
-					}
-				}
-			};
-		}
-	});
 
 }

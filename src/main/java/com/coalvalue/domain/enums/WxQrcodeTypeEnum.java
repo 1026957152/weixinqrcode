@@ -32,6 +32,13 @@ public enum WxQrcodeTypeEnum {
     WX_QRCODE_TYPE_STORAGESPACE ("storage","storage","L","",true,2592000),
 
     WX_QRCODE_TYPE_OPEN_ACCOUNT_Conduction ("open_account_conduction","open_account_conduction","L","",true,2592000),
+    WX_QRCODE_TYPE_CAPACITIY_Canvass ("capacity_canvass" ,"company","E","",true,2592000),
+    WX_QRCODE_TYPE_STORAGE_DISTRIBUTOR_Canvass_confirm ("STORAGE_DISTRIBUTOR_Canvass_confirm" ,"company","E","",true,2592000),
+    WX_QRCODE_TYPE_AGENT_CAPACITIY_Canvass ("Agent_Capacity_canvass" ,"company","E","",true,2592000),
+    WX_QRCODE_TYPE_AGENT_OUTLET_AGENCY ("OUTLET_AGENCY" ,"OUTLET_AGENCY","E","",true,2592000),
+    WX_QRCODE_TYPE_AGENT_COMPANY_Open_account ("Company_Open_account" ,"company","E","",true,2592000),
+    WEIGH_HOUSE ("WEIGH_HOUSE" ,"WEIGH_HOUSE","E","",true,2592000),
+    WX_QRCODE_TYPE_LISTING_SALE ("LISTING_SALE" ,"LISTING_SALE","E","",true,2592000),
 
     ;
 

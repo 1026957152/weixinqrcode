@@ -300,6 +300,7 @@ public class AdvancedUtil {
                 int errorCode = jsonObject.getInt("errcode");
                 String errorMsg = jsonObject.getString("errmsg");
                 log.error("创建永久带参二维码失败 errcode:{} errmsg:{}", errorCode, errorMsg);
+                throw e;
             }
         }
 

@@ -1,0 +1,45 @@
+version: '3.7'
+# docker-compose --compatibility -f docker-compose.yml up socialcredit
+services:
+
+
+  mysql:
+    name=quickstart-mysql
+    image: mysql
+#    ports:
+#      - "8080:8080"
+    environment:
+      MYSQL_ROOT_PASSWORD: 9aU5CKHUpN
+      MYSQL_USER: test
+      MYSQL_PASSWORD: m34tZ7Yaqdp5O0tm
+      MYSQL_DATABASE: gjj_test 
+    
+
+
+    restart: always
+
+
+
+  gjjdatashareiner:
+    image: docker.yulinmei.cn/api:0.0.1-SNAPSHOT
+    ports:
+      - "443:443"
+    depends_on:
+      - mysql
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    environment:
+      HOST_PORT: 8081
+      SOCIAL_CREDIT_HOST_URL: socialcredit:8080
+      URL.SRSJ: 59.218.88.214:8080
+      CIVIL_AFFAIRS_PRO_HOST_URL: 59.218.88.214:8083
+      endowment_insuranc_HOST_URL: 59.218.88.214:8083
+      Ministry_of_Public_Security_HOST_URL: 59.218.88.214:8083
+
+
+
+

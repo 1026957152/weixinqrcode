@@ -1,0 +1,127 @@
+syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+option objc_class_prefix = "HLW";
+
+package qrcode;
+
+// The greeting service definition.
+service ScanService {
+
+  rpc CreateScan (CreateScanRequest) returns (Scan) {}
+  rpc GetScan (GetScanRequest) returns (Scan) {}
+  rpc ListScan (ListScanRequest) returns (ListScanReply) {}
+
+}
+   enum ScancodeType //枚举消息类型
+    {
+        PERMANENT = 0; //proto3版本中，首成员必须为0，成员不应有相同的值
+        TEMP = 1;
+        DYNAMIC = 2;
+      SELF = 4;
+
+    }
+
+
+
+enum RequestType //枚举消息类型
+{
+    FIND_BY_ATTACH_KEY = 0; //proto3版本中，首成员必须为0，成员不应有相同的值
+
+    DYNAMIC_by_EMPLOYEE_ID = 5;
+    DYNAMIC_by_ScanCODE = 6;
+    FIND_by_KEY = 2;
+
+
+}
+
+
+
+
+
+
+message Scan {
+
+  string id = 2;
+  string userId = 3;
+  string occupationId = 4;
+
+  string referenceId = 6;
+  string referenceType = 9;
+  google.protobuf.Timestamp createDate = 27;
+
+  string status = 19;
+
+}
+
+
+
+
+
+
+message CreateScanRequest {
+  string userId = 3;
+  string occupationId = 4;
+
+  string referenceId = 6;
+  string referenceType = 9;
+
+  enum ScancodeType //枚举消息类型
+  {
+    PERMANENT = 0; //proto3版本中，首成员必须为0，成员不应有相同的值
+    TEMP = 1;
+    DYNAMIC = 2;
+    SELF = 4;
+
+  }
+  ScancodeType type = 8;
+}
+message GetScanRequest {
+  string id = 1;
+  string scenc = 2;
+  ScancodeType type = 3;
+  string info = 4;
+  string content = 5;
+  string key = 9;
+  enum RequestType //枚举消息类型
+  {
+    FIND_BY_ATTACH_KEY = 0; //proto3版本中，首成员必须为0，成员不应有相同的值
+    DYNAMIC_by_EMPLOYEE_ID = 5;
+    DYNAMIC_by_ScanCODE = 6;
+    FIND_by_KEY = 2;
+  }
+  RequestType requestType = 6;
+}
+
+
+// The request message containing the user's name.
+message ListScanRequest {
+  enum RequestType //枚举消息类型
+  {
+    BY_REFERENCE_ID = 0;
+    BY_OCCUPATION_ID = 5;
+    BY_USER_ID = 6;
+  }
+  RequestType requestType = 6;
+  string userId = 3;
+  string occupationId = 4;
+
+  string referenceId = 8;
+  string referenceType = 9;
+
+
+
+
+  int32 page_size = 70;
+  string page_token = 77;
+
+}
+
+
+message ListScanReply {
+
+  int32 total_size = 7;
+
+  repeated Scan scans = 5;
+
+}
+

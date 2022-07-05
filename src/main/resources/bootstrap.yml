@@ -1,38 +1,38 @@
-server:
-    port: 4080
+
     #context-path:
     #session:
       #cookie:
      #   name: DELIVERYSESSION
 #    servlet:
 #      context-path: /delivery
-    servlet:
-      context-path: /
+
+grpc:
+  server:
+    port: 6580
+
+
 spring:
 
   cloud:
-    config:
-      name: weixinQrcode-config
-#      label:  master
-      fail-fast: true
-      discovery:
-        enabled: true
-        serviceId: config-server
 
+    consul:
+      host: ${CONSUL_HOST:10.0.0.50}
+      port: 8500
+
+    config:
+      name: qrcode-config
+
+      fail-fast: true
+      #label:  master
+      uri: http://localhost:8889/
+    #      discovery:
+    #        enabled: true
+    #        serviceId: config
     inetutils:
       preferredNetworks:
         - 192.168
         - 10.0
-  bus:
-    trace:
-      enabled: true
 
-
-
-eureka:
-  client:
-    registry-fetch-interval-seconds: 20
-    serviceUrl.defaultZone: http://${eureka_host:eureka}:8761/eureka/
 
 
 management.endpoints.web.exposure.include: "*"

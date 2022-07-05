@@ -1,42 +1,52 @@
 plugins {
-	id 'org.springframework.boot' version '2.1.7.RELEASE'
-	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+	id 'org.springframework.boot' version '2.2.7.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 	id 'java'
 	id 'com.palantir.docker' version '0.22.1'
+	id "com.google.protobuf" version "0.8.9"
 }
 
-
-def springVersion = 'weixinqrcode'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
+sourceCompatibility = '11'
 group = 'docker.yulinmei.cn'
 
 repositories {
-	mavenCentral()
+	//mavenCentral()
+	maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+	maven{ url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
 }
 
 ext {
-	set('springCloudVersion', "Greenwich.SR2")
+	set('springCloudVersion', "Hoxton.SR4")
+
 	projectname = 'weixinqrcode'
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.cloud:spring-cloud-starter-config'
-	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+
 	implementation 'org.springframework.kafka:spring-kafka'
-    implementation('org.springframework.boot:spring-boot-starter-data-redis')
+    //implementation('org.springframework.boot:spring-boot-starter-data-redis')
 
 	compile group: 'com.alibaba', name: 'fastjson', version: '1.2.59'
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.11'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	compile group: 'net.sf.json-lib', name: 'json-lib', version: '2.4',classifier:"jdk15"
-	compile('org.springframework.boot:spring-boot-starter-actuator')
-	compile('com.google.guava:guava:17.0')
 	compile("org.apache.commons:commons-lang3:3.3.2")
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
+
+	implementation 'net.devh:grpc-server-spring-boot-starter:2.7.0.RELEASE'
+	compile 'io.grpc:grpc-all:1.24.0'
+
+
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	//implementation 'org.springframework.cloud:spring-cloud-starter-consul-config'
+	implementation 'org.springframework.cloud:spring-cloud-starter-consul-discovery'
+
+
 }
 
 dependencyManagement {
@@ -67,4 +77,41 @@ docker {
 	buildArgs([BUILD_VERSION: project.version,JAR_FILE: project.name])
 
 
+}
+
+
+
+
+protobuf {
+
+	generatedFilesBaseDir = "$projectDir/generated"
+
+	protoc {
+		artifact = "com.google.protobuf:protoc:3.7.0"
+	}
+	plugins {
+		grpc {
+			artifact = "io.grpc:protoc-gen-grpc-java:1.19.0"
+
+		}
+	}
+	generateProtoTasks {
+		all()*.plugins {
+			grpc {}
+		}
+	}
+
+
+}
+
+
+
+test {
+	// ...
+
+	// explicitly include or exclude tests
+	//include '**'
+	exclude '**'
+
+	// ...
 }

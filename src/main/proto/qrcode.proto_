@@ -1,0 +1,125 @@
+syntax = "proto3";
+
+option objc_class_prefix = "HLW";
+
+package qrcode;
+
+// The greeting service definition.
+service Qrcode {
+  // Sends a greeting
+  rpc Create (QrcodeRequest) returns (QrcodeReply) {}
+  rpc Get (QrcodeRequest) returns (QrcodeReply) {}
+  rpc Getbykey (QrcodeRequest) returns (QrcodeReply) {}
+
+  rpc Dynamic (QrcodeRequest) returns (QrcodeReply) {}
+
+
+  rpc CreateQr (CreateQrRequest) returns (Qr) {}
+  rpc GetQr (GetQrRequest) returns (Qr) {}
+
+
+}
+   enum QrcodeType //枚举消息类型
+    {
+        PERMANENT = 0; //proto3版本中，首成员必须为0，成员不应有相同的值
+        TEMP = 1;
+        DYNAMIC = 2;
+      SELF = 4;
+
+    }
+// The request message containing the user's name.
+message QrcodeRequest {
+  string id = 1;
+  string scenc = 2;
+  QrcodeType type = 3;
+  string info = 4;
+  string content = 5;
+  string key = 9;
+
+  RequestType requestType = 6;
+  }
+  // The response message containing the greetings
+  message QrcodeReply {
+  bool exsit = 1;
+  bool status = 6;
+
+  string id = 2;
+  string key = 3;
+  string content = 4;
+  repeated DynamicItem items = 5;
+
+}
+
+
+enum RequestType //枚举消息类型
+{
+    FIND_BY_ATTACH_KEY = 0; //proto3版本中，首成员必须为0，成员不应有相同的值
+
+    DYNAMIC_by_EMPLOYEE_ID = 5;
+    DYNAMIC_by_QRCODE = 6;
+    FIND_by_KEY = 2;
+
+
+}
+
+
+
+
+message DynamicItem {
+    bool status = 1;
+
+    string id = 2;
+
+    string employeeId = 3;
+
+    string content = 4;
+
+}
+
+
+message Qr {
+  string scenc = 1;
+
+  string id = 2;
+  string key = 3;
+  string content = 4;
+  repeated DynamicItem items = 5;
+
+}
+
+
+
+message CreateQrRequest {
+  string id = 1;
+  string scenc = 2;
+  string info = 4;
+  string content = 5;
+  string key = 9;
+  enum QrcodeType //枚举消息类型
+  {
+    PERMANENT = 0; //proto3版本中，首成员必须为0，成员不应有相同的值
+    TEMP = 1;
+    DYNAMIC = 2;
+    SELF = 4;
+
+  }
+  QrcodeType type = 6;
+}
+message GetQrRequest {
+  string id = 1;
+  string scenc = 2;
+  QrcodeType type = 3;
+  string info = 4;
+  string content = 5;
+  string key = 9;
+  enum RequestType //枚举消息类型
+  {
+    FIND_BY_ATTACH_KEY = 0; //proto3版本中，首成员必须为0，成员不应有相同的值
+
+    DYNAMIC_by_EMPLOYEE_ID = 5;
+    DYNAMIC_by_QRCODE = 6;
+    FIND_by_KEY = 2;
+  }
+  RequestType requestType = 6;
+}
+

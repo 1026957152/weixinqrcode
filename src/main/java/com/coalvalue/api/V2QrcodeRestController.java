@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
-import org.springframework.data.redis.core.StringRedisTemplate;
+//import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -42,8 +42,8 @@ import java.util.concurrent.TimeUnit;
 public class V2QrcodeRestController {
 
     protected transient Logger logger = LoggerFactory.getLogger(V2QrcodeRestController.class);
-    @Autowired
-    StringRedisTemplate stringRedisTemplate;
+//    @Autowired
+//    StringRedisTemplate stringRedisTemplate;
 
 
     String WeixinUrlFilte_delivery= "wx6d7f2fec44663493";;
@@ -511,8 +511,13 @@ System.out.println("建立二维码，请求"+type+"--------------"+ uuid);
 
         WxQrcodeTypeEnum type_enum = WxQrcodeTypeEnum.fromString(type);
 
-        WxPermanentQrcode wxPermanentQrcode_cache = wxService.getPermanentQrcode(uuid,info,type_enum,
-                WeixinUrlFilte_delivery);
+        WxPermanentQrcode wxPermanentQrcode_cache = null;
+        try {
+            wxPermanentQrcode_cache = wxService.createPermanentQrcode(uuid,info,type_enum,
+                    WeixinUrlFilte_delivery);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
         Map map = new HashMap();

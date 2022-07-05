@@ -10,60 +10,42 @@ import javax.persistence.Table;
  * Created by silence on 2016/3/18.
  */
 @Entity
-@Table(name = "wx_general")
+@Table(name = "wx_permanent_qrcode")
 
 public class WxPermanentQrcode extends BaseDomain{
 
-    @Column(name = "scan_id")
-    private Integer key;
 
 
     @Column(name = "app_id")
     private String appId;
-
-    @Column(name = "scan_type")
-    private String type;
     private String status;
-
-    private Integer subScene;
-
-
-    private String content;
-
-    private String ticket;
-    private Integer itemId;
-    private String itemType;
+    @Column(name = "tapped_status")
+    private String tappedStatus;
+    private String qrcodeId;
+    private String type;
     private String objectId;
     private String info;
+    private String content;
+    @Column(name = "key_")
 
-    public Integer getSubScene() {
-        return subScene;
+    private String key;
+    private String scence;
+
+
+    public String getTappedStatus() {
+        return tappedStatus;
     }
 
-    public void setSubScene(Integer subScene) {
-        this.subScene = subScene;
+    public void setTappedStatus(String tappedStatus) {
+        this.tappedStatus = tappedStatus;
     }
 
-    private Integer scanCount;
 
 
-    private String note;
 
-    public String getNote() {
-        return note;
-    }
 
-    public void setNote(String note) {
-        this.note = note;
-    }
 
-    public Integer getKey() {
-        return key;
-    }
 
-    public void setKey(Integer key) {
-        this.key = key;
-    }
 
 
     public String getAppId() {
@@ -74,24 +56,7 @@ public class WxPermanentQrcode extends BaseDomain{
         this.appId = appId;
     }
 
-    public String getType() {
-        return type;
-    }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    @Column(name = "qr_code")
-    private String qrCode;
-
-    public String getQrCode() {
-        return qrCode;
-    }
-
-    public void setQrCode(String qrCode) {
-        this.qrCode = qrCode;
-    }
 
     public String getStatus() {
         return status;
@@ -101,50 +66,15 @@ public class WxPermanentQrcode extends BaseDomain{
         this.status = status;
     }
 
-    public Integer getScanCount() {
-        return scanCount;
-    }
-
-    public void setScanCount(Integer scanCount) {
-        this.scanCount = scanCount;
-    }
 
     @Override
     public String toString() {
         return ReflectionToStringBuilder.toString(this);
     }
 
-    public String getContent() {
-        return content;
-    }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
 
-    public void setTicket(String ticket) {
-        this.ticket = ticket;
-    }
 
-    public String getTicket() {
-        return ticket;
-    }
-
-    public void setItemId(Integer itemId) {
-        this.itemId = itemId;
-    }
-
-    public Integer getItemId() {
-        return itemId;
-    }
-
-    public void setItemType(String itemType) {
-        this.itemType = itemType;
-    }
-
-    public String getItemType() {
-        return itemType;
-    }
 
     public String getObjectId() {
 
@@ -161,5 +91,45 @@ public class WxPermanentQrcode extends BaseDomain{
 
     public void setInfo(String info) {
         this.info = info;
+    }
+
+    public void setQrcodeId(String qrcodeId) {
+        this.qrcodeId = qrcodeId;
+    }
+
+    public String getQrcodeId() {
+        return qrcodeId;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public void setScence(String scence) {
+        this.scence = scence;
+    }
+
+    public String getScence() {
+        return scence;
     }
 }

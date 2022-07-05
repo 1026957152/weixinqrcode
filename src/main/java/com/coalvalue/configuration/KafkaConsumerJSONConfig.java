@@ -14,7 +14,7 @@ import org.springframework.kafka.support.converter.StringJsonMessageConverter;
 import java.util.HashMap;
 import java.util.Map;
 
-@Configuration
+//@Configuration
 public class KafkaConsumerJSONConfig {
     private final static String BOOTSTRAP_SERVERS = "192.168.10.90:9092";
     private final static String TOPIC = "new-employees";

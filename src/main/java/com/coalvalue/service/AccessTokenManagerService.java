@@ -44,7 +44,7 @@ public class AccessTokenManagerService extends BaseServiceImpl {
     private KafkaTemplate kafkaTemplateJson;
 
 
-    @KafkaListener(id="a" ,topics = "weixin_message_type_event_scan_kafka_json", groupId = "apl_fuck_4_access_token",containerFactory = "kafkaListenerContainerFactory_JSON")
+  //  @KafkaListener(id="a" ,topics = "weixin_message_type_event_scan_kafka_json", groupId = "apl_fuck_4_access_token",containerFactory = "kafkaListenerContainerFactory_JSON")
 
     public void listen_message_TransportEvent(WeixinRequestMessageTypeEvent_ScanJson message) {
 
@@ -119,7 +119,7 @@ public class AccessTokenManagerService extends BaseServiceImpl {
 
     Map<String,AccessTokenEventJson> map = new HashMap();
 
-    @KafkaListener(id="aa00000_99999_" ,topics = "access-token-event-json", groupId = "aplog_999999fu000000_access_token",containerFactory = "kafkaListenerContainerFactory_JSON")
+   // @KafkaListener(id="aa00000_99999_" ,topics = "access-token-event-json", groupId = "aplog_999999fu000000_access_token",containerFactory = "kafkaListenerContainerFactory_JSON")
 
     public void listen_message_TransportEvent(AccessTokenEventJson message) {
 

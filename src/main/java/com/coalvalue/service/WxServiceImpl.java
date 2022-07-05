@@ -7,9 +7,11 @@ import com.coalvalue.domain.OperationResult;
 import com.coalvalue.domain.entity.*;
 
 import com.coalvalue.domain.enums.ResourceType;
+import com.coalvalue.domain.enums.WxQrcodeStatusEnum;
 import com.coalvalue.domain.enums.WxQrcodeTypeEnum;
 import com.coalvalue.domain.json.WeixinQrcodeEventJson;
 
+import com.coalvalue.repository.PermanentQrcodeRepository;
 import com.coalvalue.repository.WxPermanentQrcodeRepository;
 import com.coalvalue.repository.WxTemporaryQrcodeRepository;
 
@@ -29,6 +31,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -46,6 +49,10 @@ public class WxServiceImpl extends BaseServiceImpl implements WxService {
     protected transient Logger logger = LoggerFactory.getLogger(getClass());    public static java.lang.String path_qrcode_image_resoure_path = "path_qrcode_image_resoure_path";
     @Autowired
     private WxPermanentQrcodeRepository wxPermanentQrcodeRepository;
+
+    @Autowired
+    private PermanentQrcodeRepository permanentQrcodeRepository;
+
     @Autowired
     private WxTemporaryQrcodeRepository wxTemporaryQrcodeRepository;
 
@@ -68,15 +75,19 @@ public class WxServiceImpl extends BaseServiceImpl implements WxService {
 
 
 
+
+
+
+
     @Override
 
     public WxPermanentQrcode getByCompany_type_new(String uuid, String resourceType, String type, String appId) {
 
-        WxPermanentQrcode wxScanGeneral =  wxPermanentQrcodeRepository.findByObjectIdAndItemTypeAndTypeAndAppIdAndStatus(uuid, resourceType, type, appId, CommonConstant.QRCODE_STATUS_Valid);
+        WxPermanentQrcode wxScanGeneral =  wxPermanentQrcodeRepository.findByObjectIdAndTypeAndAppIdAndStatus(uuid, type, appId, CommonConstant.QRCODE_STATUS_Valid);
 
 
         if(wxScanGeneral!= null){
-            if(wxScanGeneral.getTicket()== null){
+           /* if(wxScanGeneral.getTicket()== null){
 
                 String accessToken = accessTokenManagerService.getAccessToken(appId).getAccessToken();
                 WeixinQRCode ticket = AdvancedUtil.createPermanentQRCode(accessToken, wxScanGeneral.getId());
@@ -89,13 +100,13 @@ public class WxServiceImpl extends BaseServiceImpl implements WxService {
                     return wxScanGeneral;
 
                 }
-            }
+            }*/
             return wxScanGeneral;
         }
 
         wxScanGeneral = new WxPermanentQrcode();
 
-        wxScanGeneral.setItemType(resourceType);
+
         wxScanGeneral.setObjectId(uuid);
         wxScanGeneral.setType(type);
         wxScanGeneral.setStatus(CommonConstant.QRCODE_STATUS_Valid);
@@ -108,7 +119,7 @@ public class WxServiceImpl extends BaseServiceImpl implements WxService {
         logger.debug("创建 新的永久二维马we are after find wxgeneral ");
 
 
-        wxScanGeneral.setKey(wxScanGeneral.getId());
+        //wxScanGeneral.setKey(wxScanGeneral.getId());
         wxScanGeneral = wxPermanentQrcodeRepository.save(wxScanGeneral);
 
 
@@ -118,8 +129,8 @@ public class WxServiceImpl extends BaseServiceImpl implements WxService {
         if (ticket.getErrorCode() == null) {
 
 
-            wxScanGeneral.setContent(ticket.getUrl());
-            wxScanGeneral.setTicket(ticket.getTicket());
+           // wxScanGeneral.setContent(ticket.getUrl());
+           // wxScanGeneral.setTicket(ticket.getTicket());
             wxScanGeneral = updateGetByCompany_type_new(wxScanGeneral);
             return wxScanGeneral;
 
@@ -132,7 +143,7 @@ public class WxServiceImpl extends BaseServiceImpl implements WxService {
     }
     public OperationResult getByCompany_type_new_RETURN(String uuid, String resourceType, String type, String appId) {
 
-        WxPermanentQrcode wxScanGeneral =  wxPermanentQrcodeRepository.findByObjectIdAndItemTypeAndTypeAndAppIdAndStatus(uuid, resourceType, type, appId, CommonConstant.QRCODE_STATUS_Valid);
+        WxPermanentQrcode wxScanGeneral =  wxPermanentQrcodeRepository.findByObjectIdAndTypeAndAppIdAndStatus(uuid, type, appId, CommonConstant.QRCODE_STATUS_Valid);
 
         Integer scanId = wxPermanentQrcodeScanIdGenerator.nextIntValue();
 
@@ -151,7 +162,7 @@ public class WxServiceImpl extends BaseServiceImpl implements WxService {
 
                 wxScanGeneral = new WxPermanentQrcode();
 
-                wxScanGeneral.setItemType(resourceType);
+
                 wxScanGeneral.setObjectId(uuid);
                 wxScanGeneral.setType(type);
                 wxScanGeneral.setStatus(CommonConstant.QRCODE_STATUS_Valid);
@@ -168,10 +179,10 @@ public class WxServiceImpl extends BaseServiceImpl implements WxService {
                 logger.debug("创建 新的永久二维马we are after find wxgeneral ");
 
 
-                wxScanGeneral.setKey(scanId);
+                //wxScanGeneral.setKey(scanId);
                 wxScanGeneral = wxPermanentQrcodeRepository.save(wxScanGeneral);
-                wxScanGeneral.setContent(ticket.getUrl());
-                wxScanGeneral.setTicket(ticket.getTicket());
+              //  wxScanGeneral.setContent(ticket.getUrl());
+               // wxScanGeneral.setTicket(ticket.getTicket());
                 wxScanGeneral = updateGetByCompany_type_new(wxScanGeneral);
 
 
@@ -181,23 +192,23 @@ public class WxServiceImpl extends BaseServiceImpl implements WxService {
 
                 capacityEventJSON.setTimestamp(LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli());
                 capacityEventJSON.setAppId(wxScanGeneral.getAppId());
-                capacityEventJSON.setScanId(wxScanGeneral.getKey());
+             //   capacityEventJSON.setScanId(wxScanGeneral.getKey());
                 capacityEventJSON.setTtype(wxScanGeneral.getType());
                 capacityEventJSON.setStatus(wxScanGeneral.getStatus());
 
 
                 capacityEventJSON.setId(UUID.randomUUID().toString());
 
-                capacityEventJSON.setSubScene(wxScanGeneral.getSubScene());
+
                 capacityEventJSON.setUrl("_");
-                capacityEventJSON.setContent(wxScanGeneral.getContent());
-                capacityEventJSON.setTicket(wxScanGeneral.getTicket());
+/*                capacityEventJSON.setContent(wxScanGeneral.getContent());
+                capacityEventJSON.setTicket(wxScanGeneral.getTicket());*/
                 capacityEventJSON.setTemporaryOrPermanent("Permanent");
 
-                capacityEventJSON.setTtype(wxScanGeneral.getItemType());
+
                 capacityEventJSON.setObjectUuid(wxScanGeneral.getObjectId());
-                capacityEventJSON.setQrCode(wxScanGeneral.getQrCode());
-                capacityEventJSON.setType(wxScanGeneral.getItemType());
+              //  capacityEventJSON.setQrCode(wxScanGeneral.getQrCode());
+
 
                 kafkaTemplateJson.send("weixin-qrcode-event-json",capacityEventJSON);
 
@@ -219,20 +230,172 @@ public class WxServiceImpl extends BaseServiceImpl implements WxService {
 
     }
 
+
+  //  @PostConstruct
+    @Transactional
+    public void init() {
+
+
+        wxPermanentQrcodeRepository.findAll().stream().filter(e->e.getTappedStatus() == null).forEach(untappedQrcode ->{
+
+            untappedQrcode.setTappedStatus(WxQrcodeStatusEnum.Untapped.getText());
+
+
+            logger.debug("创建 新的永久二维马we are after find wxgeneral ");
+
+            untappedQrcode = wxPermanentQrcodeRepository.save(untappedQrcode);
+        });
+
+
+
+
+
+
+
+    }
+
     @Override
-    public WxPermanentQrcode getPermanentQrcode(String uuid, String info, WxQrcodeTypeEnum type_enum, String appId) {
-        WxPermanentQrcode wxScanGeneral =  wxPermanentQrcodeRepository.findByObjectIdAndTypeAndAppIdAndStatus(uuid, type_enum.getText(), appId, CommonConstant.QRCODE_STATUS_Valid);
+    @Transactional
+    public WxPermanentQrcode createPermanentQrcode(String uuid, String info, WxQrcodeTypeEnum type_enum, String appId) throws Exception {
+        PermanentQrcode permanentQrcode = permanentQrcodeRepository.findTop1ByTappedStatusAndAppId(WxQrcodeStatusEnum.Untapped.getText(),appId);
+             //   findByObjectIdAndTypeAndAppIdAndStatus(uuid, type_enum.getText(), appId, CommonConstant.QRCODE_STATUS_Valid);
+
+
+        if(permanentQrcode!= null){
+
+            WxPermanentQrcode untappedQrcode = new WxPermanentQrcode(); //wxPermanentQrcodeRepository.findTop1ByTappedStatus(WxQrcodeStatusEnum.Untapped.getText());
+            untappedQrcode.setQrcodeId(permanentQrcode.getUuid());
+
+            untappedQrcode.setObjectId(uuid);
+            untappedQrcode.setAppId(appId);
+            untappedQrcode.setInfo(info);
+            untappedQrcode.setType(type_enum.getText());
+            untappedQrcode.setTappedStatus(WxQrcodeStatusEnum.Tapped.getText());
+            untappedQrcode.setContent(permanentQrcode.getContent());
+            untappedQrcode.setStatus(CommonConstant.QRCODE_STATUS_Valid);
+            untappedQrcode.setKey(permanentQrcode.getKey()+"");
+
+            logger.debug("创建 新的永久二维马we are after find wxgeneral " + uuid);
+            logger.debug("创建 新的永久二维马we are after find wxgeneral " + appId);
+            logger.debug("创建 新的永久二维马we are after find wxgeneral ");
+
+            untappedQrcode =  wxPermanentQrcodeRepository.save(untappedQrcode);
+
+
+            permanentQrcode.setObjectId(uuid);
+            permanentQrcode.setTappedStatus(WxQrcodeStatusEnum.Tapped.getText());
+            permanentQrcode = permanentQrcodeRepository.save(permanentQrcode);
+
+            return untappedQrcode;
+
+
+        }else{
+            return null;
+        }
+
+
+
+
+
+
+    }
+
+
+
+    @Override
+    @Transactional
+    public WxPermanentQrcode createSelfQrcode( String key,String info, WxQrcodeTypeEnum scen_enum, String appId) throws Exception {
+
+
+
+        System.out.println("为啥找不到呐，key info appid " + key+ "------"+ info+ "========="+ appId);
+
+        appId = "wx6d7f2fec44663493";
+        PermanentQrcode permanentQrcode = permanentQrcodeRepository.findTop1ByTappedStatusAndAppId(WxQrcodeStatusEnum.Untapped.getText(),appId);
+        //   findByObjectIdAndTypeAndAppIdAndStatus(uuid, type_enum.getText(), appId, CommonConstant.QRCODE_STATUS_Valid);
+        permanentQrcodeRepository.findAll().stream().forEach(e->{
+
+            System.out.println(" key info appid " + e.getAppId()+ "------"+ e.getInfo()+ "========="+ e.getObjectId());
+
+        });
+
+        if(permanentQrcode!= null){
+            permanentQrcode.setObjectId(key);
+            permanentQrcode.setTappedStatus(WxQrcodeStatusEnum.Tapped.getText());
+            permanentQrcode = permanentQrcodeRepository.save(permanentQrcode);
+
+
+
+
+
+            WxPermanentQrcode untappedQrcode = wxPermanentQrcodeRepository.findByKeyAndScence(key,scen_enum.getText());
+
+            if(untappedQrcode == null){
+              untappedQrcode = new WxPermanentQrcode(); //wxPermanentQrcodeRepository.findTop1ByTappedStatus(WxQrcodeStatusEnum.Untapped.getText());
+                untappedQrcode.setQrcodeId(permanentQrcode.getUuid());
+
+                untappedQrcode.setObjectId(key);
+                untappedQrcode.setAppId(appId);
+                untappedQrcode.setInfo(info);
+                untappedQrcode.setScence(scen_enum.getText());
+                untappedQrcode.setTappedStatus(WxQrcodeStatusEnum.Tapped.getText());
+                untappedQrcode.setContent(permanentQrcode.getContent());
+                untappedQrcode.setStatus(CommonConstant.QRCODE_STATUS_Valid);
+                untappedQrcode.setKey(key);
+
+                logger.debug("创建 新的永久二维马we are after find wxgeneral " + key);
+                logger.debug("创建 新的永久二维马we are after find wxgeneral " + appId);
+                logger.debug("创建 新的永久二维马we are after find wxgeneral ");
+
+                untappedQrcode =  wxPermanentQrcodeRepository.save(untappedQrcode);
+
+
+            }else{
+
+            }
+
+
+
+            return untappedQrcode;
+
+
+        }else{
+
+            throw new Exception("没有找到可用的二维码");
+        }
+
+
+
+
+
+
+    }
+
+    @Override
+    @Transactional
+    public WxTemporaryQrcode createTempQrcode(String uuid, String info, WxQrcodeTypeEnum type_enum, String appId) throws Exception {
+        return null;
+    }
+
+
+
+
+
+    public WxPermanentQrcode prefetch(String uuid, String info, WxQrcodeTypeEnum type_enum, String appId) throws Exception {
+        WxPermanentQrcode wxScanGeneral =  wxPermanentQrcodeRepository.findByObjectIdAndTypeAndAppIdAndStatus(uuid, type_enum.getText(), appId, WxQrcodeStatusEnum.Untapped.getText());
 
         Integer scanId = wxPermanentQrcodeScanIdGenerator.nextIntValue();
 
-        if(wxScanGeneral != null && wxScanGeneral.getInfo() == null){
+/*        if(wxScanGeneral != null && wxScanGeneral.getInfo() == null){
             Map map = new HashMap<>();
-
             map.put("companyId",uuid);
             wxScanGeneral.setInfo(JSON.toJSONString(map));
             wxScanGeneral = wxPermanentQrcodeRepository.save(wxScanGeneral);
-        }
+        }*/
         if(wxScanGeneral== null){
+
+
+
             String accessToken = accessTokenManagerService.getAccessToken(appId).getAccessToken();
             WeixinQRCode ticket = AdvancedUtil.createPermanentQRCode(accessToken, scanId);
 
@@ -248,19 +411,16 @@ public class WxServiceImpl extends BaseServiceImpl implements WxService {
                 wxScanGeneral.setAppId(appId);
 
 
-
-
-                logger.debug("创建 新的永久二维马we are after find wxgeneral "+uuid);
-                logger.debug("创建 新的永久二维马we are after find wxgeneral "+appId);
+                logger.debug("创建 新的永久二维马we are after find wxgeneral " + uuid);
+                logger.debug("创建 新的永久二维马we are after find wxgeneral " + appId);
                 logger.debug("创建 新的永久二维马we are after find wxgeneral ");
 
-
+/*
                 wxScanGeneral.setKey(scanId);
                 wxScanGeneral = wxPermanentQrcodeRepository.save(wxScanGeneral);
                 wxScanGeneral.setContent(ticket.getUrl());
                 wxScanGeneral.setTicket(ticket.getTicket());
                 wxScanGeneral = updateGetByCompany_type_new(wxScanGeneral);
-
 
 
                 WeixinQrcodeEventJson capacityEventJSON = new WeixinQrcodeEventJson();
@@ -275,34 +435,42 @@ public class WxServiceImpl extends BaseServiceImpl implements WxService {
 
                 capacityEventJSON.setId(UUID.randomUUID().toString());
 
-                capacityEventJSON.setSubScene(wxScanGeneral.getSubScene());
                 capacityEventJSON.setUrl("_");
                 capacityEventJSON.setContent(wxScanGeneral.getContent());
                 capacityEventJSON.setTicket(wxScanGeneral.getTicket());
                 capacityEventJSON.setTemporaryOrPermanent("Permanent");
 
-                capacityEventJSON.setTtype(wxScanGeneral.getItemType());
+
                 capacityEventJSON.setObjectUuid(wxScanGeneral.getObjectId());
                 capacityEventJSON.setQrCode(wxScanGeneral.getQrCode());
-                capacityEventJSON.setType(wxScanGeneral.getItemType());
 
-                kafkaTemplateJson.send("weixin-qrcode-event-json",capacityEventJSON);
 
+                kafkaTemplateJson.send("weixin-qrcode-event-json", capacityEventJSON);*/
 
 
                 return wxScanGeneral;
 
-            }else{
-                return null;
+            } else{
+                throw new Exception("创建失败");
             }
 
+
+
+
+        }else{
+            return wxScanGeneral;
         }
 
-        return wxScanGeneral;
+
+
 
 
 
     }
+
+
+
+
 
     @Transactional
     public WxPermanentQrcode updateGetByCompany_type_new(WxPermanentQrcode wxPermanentQrcode) {

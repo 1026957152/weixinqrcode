@@ -17,6 +17,11 @@ public interface WxService extends BaseService {
     WxPermanentQrcode getByCompany_type_new(String uuid, String resourceType, String type, String appId);
 
 
+    @Transactional
+    WxPermanentQrcode createSelfQrcode(String key, String info, WxQrcodeTypeEnum scen_enum, String appId) throws Exception;
+
+    @Transactional
+    WxTemporaryQrcode createTempQrcode(String uuid, String info, WxQrcodeTypeEnum type_enum, String appId) throws Exception;
 
     WxTemporaryQrcode getByTimeSilence_type(String no, String type, String appId);
 
@@ -30,6 +35,6 @@ public interface WxService extends BaseService {
 
 
     OperationResult getByCompany_type_new_RETURN(String uuid, String text, String type, String constants_corpid);
+    WxPermanentQrcode createPermanentQrcode(String uuid, String info, WxQrcodeTypeEnum type_enum, String weixinUrlFilte_delivery) throws Exception;
 
-    WxPermanentQrcode getPermanentQrcode(String uuid, String info, WxQrcodeTypeEnum type_enum, String weixinUrlFilte_delivery);
 }
